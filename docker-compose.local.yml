@@ -1,0 +1,14 @@
+services:
+  neo4j:
+    image: neo4j:5.19
+    container_name: kgm_neo4j
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-password}
+    ports:
+      - "7474:7474"  # HTTP interface
+      - "7687:7687"  # Bolt protocol
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  neo4j_data:

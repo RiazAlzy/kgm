@@ -1,0 +1,52 @@
+<!-- Trigger HTMX polling every 5 seconds until status is COMPLETED or FAILED -->
+<div 
+    class="bg-white rounded-xl border border-slate-200 shadow-sm p-6"
+    {% if "FAILED" not in document.status and document.status != "COMPLETED" %}
+        hx-get="/progress/{{ document.hash }}/"
+        hx-trigger="every 5s"
+        hx-swap="outerHTML"
+    {% endif %}
+>
+    <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-semibold text-slate-800">File: {{ document.filename }}</h3>
+        
+        {% if document.status == "COMPLETED" %}
+            <span class="bg-green-100 text-green-700 text-xs px-2.5 py-0.5 rounded-full font-medium">Done</span>
+        {% elif "FAILED" in document.status %}
+            <span class="bg-red-100 text-red-700 text-xs px-2.5 py-0.5 rounded-full font-medium">Failed</span>
+        {% else %}
+            <span class="bg-indigo-100 text-indigo-700 text-xs px-2.5 py-0.5 rounded-full font-medium animate-pulse">Processing</span>
+        {% endif %}
+    </div>
+
+    <!-- Status Text -->
+    <div class="text-xs font-mono text-slate-500 mb-4">
+        Current Pipeline State: <span class="font-bold text-indigo-600">{{ document.get_status_display }}</span>
+    </div>
+
+    <!-- Progress Bar Representation -->
+    <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+        <div class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500 ease-out" 
+            style="width: 
+            {% if document.status == 'PENDING' %} 5% 
+            {% elif 'EXTRACTING' in document.status %} 25% 
+            {% elif 'CHUNKING' in document.status %} 40% 
+            {% elif 'UPLOADING' in document.status %} 60% 
+            {% elif document.status == 'COMPLETED' %} 100% 
+            {% else %} 100% {% endif %}">
+        </div>
+    </div>
+    
+    {% if document.status == "COMPLETED" %}
+    <div class="mt-6 flex gap-4">
+        <a href="/graph" class="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 py-2 px-4 rounded-lg shadow-sm transition-colors">Explore Graph Map</a>
+        <a href="/chat" class="text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 py-2 px-4 rounded-lg transition-colors">Talk to AI</a>
+    </div>
+    {% endif %}
+
+    {% if "FAILED" in document.status %}
+    <div class="mt-4 text-xs text-red-600">
+        The pipeline halted at this state to preserve data integrity. Please re-upload the file to automatically resume from this exact checkpoint.
+    </div>
+    {% endif %}
+</div>

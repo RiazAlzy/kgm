@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="relative w-full h-[calc(100vh-73px)] bg-slate-50 overflow-hidden font-sans">
+    
+    <!-- WebGL Force Graph Container -->
+    <div id="graph-container" class="w-full h-full"></div>
+
+    <!-- HTMX Modal Target -->
+    <div id="modal-container" class="relative z-50"></div>
+</div>
+
+<script src="{% static 'graph.js' %}"></script>
+{% endblock content %}

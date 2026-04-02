@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# Media & Database
+media/
+db.sqlite3
+celery_broker.sqlite3
+celery_results.sqlite3
+
+# Node / Tailwind
+node_modules/
+npm-debug.log
+theme/static/css/dist/
+
+# Environment
+.env

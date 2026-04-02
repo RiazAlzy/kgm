@@ -1,0 +1,14 @@
+{
+  "name": "kgm",
+  "version": "1.0.0",
+  "description": "KGM Dev Scripts",
+  "scripts": {
+    "prekgm": "docker compose -f docker-compose.local.yml up -d neo4j",
+    "kgm": "wait-on tcp:127.0.0.1:7687 && concurrently --names \"Django,TW,Celery,Ready\" --prefix-colors \"blue,magenta,green,cyan\" \"python -u manage.py runserver\" \"python -u manage.py tailwind start\" \"python -u -m celery -A kgm worker -l INFO --pool=solo\" \"npm run notify\"",
+    "notify": "wait-on http://localhost:8000 && node -e \"console.log('\\n\\x1b[32m🚀 KGM APP IS READY!\\x1b[0m\\nAccess it at: \\x1b[34m\\x1b[4mhttp://localhost:8000\\x1b[0m\\n')\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
+  }
+}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto h-[calc(100vh-80px)] flex flex-col bg-white shadow-xl rounded-lg overflow-hidden border border-gray-200" x-data="chatApp()">
+    
+    <!-- Header -->
+    <div class="bg-gray-800 text-white px-6 py-4 flex items-center justify-between">
+        <h2 class="text-lg font-bold flex items-center gap-2">
+            Graph Mastere AI
+        </h2>
+        <!-- Dynamic Status Indicator -->
+        <span x-show="isProcessing" class="text-sm text-green-300 animate-pulse flex items-center gap-2">
+            <svg class="animate-spin h-4 w-4 text-green-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span x-text="currentStatus"></span>
+        </span>
+    </div>
+
+    <!-- Chat History Window -->
+    <div class="flex-1 overflow-y-auto p-6 bg-gray-50 space-y-6" id="chat-window">
+        
+        <!-- Welcome Message -->
+        <div class="flex items-start">
+            <div class="bg-indigo-100 text-indigo-900 rounded-lg p-4 max-w-[80%] shadow-sm">
+                Hello! I am connected directly to your Knowledge Graph. Ask me about any concepts you've uploaded.
+            </div>
+        </div>
+
+        <!-- Render Messages via Alpine -->
+        <template x-for="(msg, index) in messages" :key="index">
+            <div :class="msg.role === 'user' ? 'flex items-end justify-end' : 'flex items-start'">
+                <div :class="msg.role === 'user' ? 'bg-blue-600 text-white rounded-l-xl rounded-tr-xl' : 'bg-white border border-gray-200 text-gray-800 rounded-r-xl rounded-tl-xl'" 
+                     class="p-4 max-w-[85%] shadow-sm whitespace-pre-wrap leading-relaxed" 
+                     x-text="msg.content">
+                </div>
+            </div>
+        </template>
+        
+        <!-- Bottom Anchor for Auto-scroll -->
+        <div id="scroll-anchor"></div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="p-4 bg-white border-t border-gray-200">
+        <form @submit.prevent="sendMessage" class="flex gap-4">
+            <input type="text" 
+                   x-model="inputMessage" 
+                   :disabled="isProcessing"
+                   placeholder="Ask about connections in your graph..." 
+                   class="flex-1 rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed py-3 px-4"
+                   autocomplete="off" required>
+            
+            <button type="submit" 
+                    :disabled="isProcessing || !inputMessage.trim()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center gap-2">
+                Send
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'chat.js' %}"></script>
+{% endblock %}

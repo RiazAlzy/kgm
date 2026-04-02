@@ -1,0 +1,30 @@
+# --- Core Django & Framework Stability ---
+Django==5.2.12                    # 2026 Stable Long Term Support version
+django-environ==0.12.0           # Environment variable management
+django-htmx==1.21.0              # HTMX integration for Django
+django-tailwind==3.8.0           # Tailwind CSS integration
+
+# --- Real-time & Asynchronous Handling ---
+channels==4.2.0                  # Django Channels for WebSockets
+daphne==4.2.0                    # ASGI Server for Channels/LangGraph streaming
+
+# --- Distributed Task Queue ---
+celery==5.5.0                    # Distributed Task Queue
+SQLAlchemy==2.0.41
+pywin32==311
+
+# --- Graph Database (Neo4j) ---
+neo4j==5.19.0                    # Official Neo4j support
+
+# --- AI, Multi-Agent & Multimodal Pipeline ---
+langgraph==1.1.3                 # Multi-agent workflow orchestration
+langchain==1.2.13                # Base LLM framework
+langchain-core==1.2.23           # Essential for schema stability
+langchain-openai==1.1.12          # OpenAI/Local model integration
+langchain-google-genai==4.2.1     # Gemini/Google AI integration
+llama-cloud>=1.0              # High-fidelity multimodal document parsing & skeleton extraction
+
+httpx=0.28.1
+
+# --- Data Processing & Auxiliary Tools ---
+Pillow==12.1.1                   # Image processing for extracted diagrams

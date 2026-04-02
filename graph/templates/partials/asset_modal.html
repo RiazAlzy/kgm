@@ -1,0 +1,67 @@
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<div class="fixed inset-0 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm z-50"
+     x-data="{ show: true }"
+     x-show="show"
+     x-transition.opacity.duration.300ms>
+    
+    <!-- Modal Body -->
+    <div class="bg-white border border-slate-200 rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[85vh] flex flex-col overflow-hidden" 
+         @click.away="show = false"
+         x-transition.scale.origin.bottom.duration.300ms>
+        
+        <!-- Header -->
+        <div class="flex justify-between items-center px-6 py-4 bg-slate-50 border-b border-slate-200">
+            <h3 class="text-slate-800 font-semibold text-lg">Source Knowledge Assets</h3>
+            <button @click="show = false" class="text-slate-400 hover:text-slate-700 transition-colors bg-white border border-slate-200 hover:bg-slate-50 p-1.5 rounded-lg shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <!-- Extracted Markdown/Image Body -->
+        <div class="p-6 overflow-y-auto text-slate-700 prose prose-slate max-w-none space-y-6">
+            
+            {% for asset in assets %}
+                <!-- Individual Asset Block -->
+                <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+                    
+                    <!-- Asset Type Badge -->
+                    <div class="mb-4 flex items-center">
+                        <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700 bg-blue-50 border border-blue-200 rounded-md">
+                            {{ asset.asset_type }}
+                        </span>
+                    </div>
+                    
+                    <!-- Markdown Content Container -->
+                    <div id="asset-content-{{ forloop.counter }}" class="break-words">
+                        <!-- Dynamically populated via marked.js loop below -->
+                    </div>
+
+                    <!-- Associated Images -->
+                    {% if asset.image_paths %}
+                        <div class="mt-6 space-y-4">
+                            {% for img_path in asset.image_paths %}
+                                <img src="/media/{{ img_path }}" alt="Extracted Figure" class="rounded-lg shadow-sm border border-slate-200 max-w-full h-auto">
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <script>
+                    (function() {
+                        var container = document.getElementById('asset-content-{{ forloop.counter }}');
+                        if (container) {
+                            container.innerHTML = marked.parse('{{ asset.content|escapejs }}');
+                        }
+                    })();
+                </script>
+            {% empty %}
+                <div class="flex flex-col items-center justify-center py-12">
+                    <svg class="w-12 h-12 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                    <p class="text-slate-500 italic">No specific source assets found for this concept.</p>
+                </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
