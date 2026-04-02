@@ -15,7 +15,7 @@ Knowledge Graph Mastere (KGM) is a sophisticated open-source project for explori
 - **Backend:** Django 5.2 (LTS), Django Channels (WebSockets), Celery (Async Tasks).
 - **Frontend:** HTMX, Alpine.js, TailwindCSS, Force-Graph (WebGL).
 - **Databases:** Neo4j (Graph/Logical), SQLite (Content/Assets).
-- **AI/LLM:** LangGraph (Multi-agent orchestration), LlamaParse (High-fidelity parsing), OpenAI GPT-4o.
+- **AI/LLM:** LangGraph (Multi-agent orchestration), LlamaParse (High-fidelity parsing), Gemini or OpenAI.
 
 ---
 
